@@ -1,1 +1,3 @@
-* liguist-language=Vyper
+*.vy liguist-detectable=true
+*.html liguist-detectable=true
+*.css liguist-detectable=true
