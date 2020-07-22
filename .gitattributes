@@ -1,3 +1,3 @@
-*.vy liguist-detectable=true
-*.html liguist-detectable=true
-*.css liguist-detectable=true
+*.vy liguist-language=true
+*.html liguist-language=true
+*.css liguist-language=true
