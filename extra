@@ -1,0 +1,388 @@
+"0x2A071aaa0CDF1b513F0381B1fa18e69c4490345a" address
+0x391Ef4A49a05A98059d9cEfCAf7AE5d1b5f77979 smart contract
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+	<meta charset="utf-8" />
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+
+    <script>
+        window.onload = function () {
+            if(typeof web3 == 'undefined')
+            {
+                document.getElementById("metamask").innerHTML = "you need to install metamask";
+            }
+            getvalues();
+        }
+
+        function getvalues() {
+            try{
+
+
+                var abi = [{ "outputs": [], "inputs": [{ "type": "address", "name": "_beneficiary" }, { "type": "uint256", "unit": "sec", "name": "_bidding_time" }], "constant": false, "payable": false, "type": "constructor" }, { "constant": false, "payable": true, "type": "fallback" }, { "name": "withdraw", "outputs": [], "inputs": [], "constant": false, "payable": false, "type": "function", "gas": 55516 }, { "name": "endAuction", "outputs": [], "inputs": [], "constant": false, "payable": false, "type": "function", "gas": 70801 }, { "name": "beneficiary", "outputs": [{ "type": "address", "name": "out" }], "inputs": [], "constant": true, "payable": false, "type": "function", "gas": 573 }, { "name": "auctionStart", "outputs": [{ "type": "uint256", "unit": "sec", "name": "out" }], "inputs": [], "constant": true, "payable": false, "type": "function", "gas": 603 }, { "name": "auctionEnd", "outputs": [{ "type": "uint256", "unit": "sec", "name": "out" }], "inputs": [], "constant": true, "payable": false, "type": "function", "gas": 633 }, { "name": "highestBidder", "outputs": [{ "type": "address", "name": "out" }], "inputs": [], "constant": true, "payable": false, "type": "function", "gas": 663 }, { "name": "highestBid", "outputs": [{ "type": "uint256", "unit": "wei", "name": "out" }], "inputs": [], "constant": true, "payable": false, "type": "function", "gas": 693 }, { "name": "ended", "outputs": [{ "type": "bool", "name": "out" }], "inputs": [], "constant": true, "payable": false, "type": "function", "gas": 723 }, { "name": "pendingReturns", "outputs": [{ "type": "uint256", "unit": "wei", "name": "out" }], "inputs": [{ "type": "address", "name": "arg0" }], "constant": true, "payable": false, "type": "function", "gas": 907 }]
+                   
+                var contractAddress = "0xb22aaE3cC4c1FD0376408098ad16721bfBA98964";
+                myAbi = web3.eth.contract(abi);
+                var myfunction = myAbi.at(contractAddress);
+
+                myfunction.beneficiary.call(function (err, result) {
+                    if (err) { document.getElementById("metamask").innerHTML = err }
+                    if (result) {
+                        document.getElementById("beneficiary").innerHTML = result;
+                    }
+                });
+
+
+                myfunction.highestBid.call(function (err, result) {
+                    if (err) { document.getElementById("metamask").innerHTML = err }
+                    if (result) {
+                        document.getElementById("highestbid").innerHTML = result;
+                    }
+                });
+
+
+                myfunction.highestBidder.call(function (err, result) {
+                    if (err) { document.getElementById("metamask").innerHTML = err }
+                    if (result) {
+                        document.getElementById("highestbidder").innerHTML = result;
+                    }
+                });
+
+                myfunction.auctionEnd.call(function (err, result) {
+                    if (err) { document.getElementById("metamask").innerHTML = err }
+                    if (result) {
+                        document.getElementById("endsin").innerHTML = result;
+                    }
+                });
+
+            }
+            catch(err) {
+                document.getElementById("metamask").innerHTML=err;
+            }
+        }
+
+
+        function makeDeposit() {
+            const amount = web3.toWei(0.15, 'ether');
+            web3.eth.getAccounts(function (error, result) {
+                web3.eth.sendTransaction(
+                    {
+                        from: result[0],
+                        to: "0xb22aaE3cC4c1FD0376408098ad16721bfBA98964",
+                        value: amount, 
+                        data: "0x06cb4bcd"
+                    }, function (err, transactionHash) {
+                        if (!err)
+                            console.log(transactionHash);
+                    });
+            });
+
+        }
+
+    </script>
+
+    <div id="metamask"></div>
+
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h1 class="p-4">Simple Auction dApp</h1>
+        </div>
+
+        <div class="col-md-12 text-center">
+            <h3 class="p-3">Contract Address</h3>
+            <p id="contractaddress">0xb22aaE3cC4c1FD0376408098ad16721bfBA98964</p>
+        </div>
+
+        <div class="col-md-12 text-center">
+            <h5 class="p-1">Beneficiary Address</h5>
+            <p id="beneficiary"></p>
+        </div>
+    </div>
+
+    <div class="col-md-12 text-center p-2">
+        <table style="width:100%">
+            <thead>
+                <tr>
+                    <td style="width:300px; font-weight:bold">Highest Bid
+                    <br />
+                    </td>
+                    <td style="width:300px; font-weight:bold">Auction Ends In
+                    <br /></td>
+                    <td style="width:300px; font-weight:bold">Highest Bidder
+                    <br /></td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="width:300px" id="highestbid">
+
+
+                    </td>
+                    <td style="width:300px" id="endsin"></td>
+                    <td style="width:300px" id="highestbidder"></td>
+                </tr>
+              
+            </tbody>
+        </table>
+    </div>
+
+   <div class="col-md-12 text-center p-4">
+       <input id="Button1" type="button" onclick="makeDeposit()" class="btn btn-info" value="Make Deposit" />
+   </div> 
+
+</body>
+</html>
+
+
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Title Page</title>
+    <style>
+      body {
+        background-image: url('backg.jpg');
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: 100% 100%;
+      }
+    </style>
+    
+    <link
+      href="node_modules/bootstrap/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <script>
+      window.onload = function () {
+        if (typeof web3 == 'undefined') {
+          document.getElementById('metamask').innerHTML =
+            'you need to install metamask';
+        }
+        getvalues();
+      };
+      function getvalues() {
+        try {
+          var abi = [
+            {
+              outputs: [],
+              inputs: [
+                { type: 'address', name: '_benificiary' },
+                { type: 'uint256', unit: 'sec', name: '_bidding_time' },
+              ],
+              constant: false,
+              payable: false,
+              type: 'constructor',
+            },
+            { constant: false, payable: true, type: 'fallback' },
+            {
+              name: 'withdraw',
+              outputs: [],
+              inputs: [],
+              constant: false,
+              payable: false,
+              type: 'function',
+              gas: 56154,
+            },
+            {
+              name: 'endAuction',
+              outputs: [],
+              inputs: [],
+              constant: false,
+              payable: false,
+              type: 'function',
+              gas: 72639,
+            },
+            {
+              name: 'beneficiary',
+              outputs: [{ type: 'address', name: 'out' }],
+              inputs: [],
+              constant: true,
+              payable: false,
+              type: 'function',
+              gas: 1211,
+            },
+            {
+              name: 'auctionStart',
+              outputs: [{ type: 'uint256', unit: 'sec', name: 'out' }],
+              inputs: [],
+              constant: true,
+              payable: false,
+              type: 'function',
+              gas: 1241,
+            },
+            {
+              name: 'auctionend',
+              outputs: [{ type: 'uint256', unit: 'sec', name: 'out' }],
+              inputs: [],
+              constant: true,
+              payable: false,
+              type: 'function',
+              gas: 1271,
+            },
+            {
+              name: 'highestBidder',
+              outputs: [{ type: 'address', name: 'out' }],
+              inputs: [],
+              constant: true,
+              payable: false,
+              type: 'function',
+              gas: 1301,
+            },
+            {
+              name: 'highestBid',
+              outputs: [{ type: 'uint256', unit: 'wei', name: 'out' }],
+              inputs: [],
+              constant: true,
+              payable: false,
+              type: 'function',
+              gas: 1331,
+            },
+            {
+              name: 'ended',
+              outputs: [{ type: 'bool', name: 'out' }],
+              inputs: [],
+              constant: true,
+              payable: false,
+              type: 'function',
+              gas: 1361,
+            },
+            {
+              name: 'pendingReturns',
+              outputs: [{ type: 'uint256', unit: 'wei', name: 'out' }],
+              inputs: [{ type: 'address', name: 'arg0' }],
+              constant: true,
+              payable: false,
+              type: 'function',
+              gas: 1545,
+            },
+          ];
+          var contractAddress = '0x391Ef4A49a05A98059d9cEfCAf7AE5d1b5f77979';
+          myAbi = web3.eth.contract(abi);
+          var myfunction = myAbi.at(contractAddress);
+          myfunction.beneficiary.call(function (err, result) {
+            if (err) {
+              document.getElementById('metamask').innerHTML = err;
+            }
+            if (result) {
+              document.getElementById('beneficiary').innerHTML = result;
+            }
+          });
+          myfunction.auctionend.call(function (err, result) {
+            if (err) {
+              document.getElementById('metamask').innerHTML = err;
+            }
+            if (result) {
+              document.getElementById('endsin').innerHTML = result;
+            }
+          });
+          myfunction.highestBid.call(function (err, result) {
+            if (err) {
+              document.getElementById('metamask').innerHTML = err;
+            }
+            if (result) {
+              document.getElementById('highestbid').innerHTML = result;
+            }
+          });
+          myfunction.highestBidder.call(function (err, result) {
+            if (err) {
+              document.getElementById('metamask').innerHTML = err;
+            }
+            if (result) {
+              document.getElementById('highestbidder').innerHTML = result;
+            }
+          });
+        } catch (err) {
+          document.getElementById('metamask').innerHTML = err;
+        }
+      }
+      function makedeposit() {
+        const amount = web3.toWei(0.15, 'ether');
+        web3.eth.getAccounts(function (err, result) {
+          web3.eth.sendTransaction(
+            {
+              from: result[0],
+              to: '0x391Ef4A49a05A98059d9cEfCAf7AE5d1b5f77979',
+              val: amount,
+              data: '0x06cb4cd',
+            },
+            function (err, thash) {
+              if (!err) console.log(transactionHash);
+            }
+          );
+        });
+      }
+    </script>
+    <div id="metamask"></div>
+    <div class="row">
+      <div class="col-md-12 text-center text-white">
+        <h1 class="p-4" class="justify-center">
+          Open Bidding
+        </h1>
+      </div>
+      <div class="col-md-12 text-center text-white">
+        <h3 class="p-3" class="justify-center bold">
+          Contract Address
+          <p id="contractaddress">0x391Ef4A49a05A98059d9cEfCAf7AE5d1b5f77979</p>
+        </h3>
+      </div>
+      <div class="col-md-12 text-center text-white">
+        <h3 class="p-3" class="justify-center">
+          Benificiary Address
+          <p id="beneficiary"></p>
+        </h3>
+      </div>
+      <div class="col-md-12 text-center p-4">
+        <input
+          id="Button1"
+          type="button"
+          class="btn btn-dark"
+          value="Bid your price"
+          onclick="makedeposit()"
+        />
+      </div>
+      <div
+        class="card-deck text-center justify-center"
+        style="padding-left: 20%; padding-right: 20%;"
+      >
+        <div
+          class="card bg-light mb-3 justify-center"
+          style="max-width: 18rem;"
+        >
+          <div class="card-header">Highest Bid</div>
+          <div class="card-body">
+            <h5 class="card-title" id="highestbid">Light card title</h5>
+            <p class="card-text">
+              It's the maximum bid set by people till this time
+            </p>
+          </div>
+        </div>
+        <div class="card bg-light mb-3" style="max-width: 36rem;">
+          <div class="card-header">Auction ends in</div>
+          <div class="card-body">
+            <h5 class="card-title" id="endsin">Light card title</h5>
+            <p class="card-text">
+              Quickly bid before the bidding ends
+            </p>
+          </div>
+        </div>
+        <div class="card bg-light mb-3" style="max-width: 18rem;">
+          <div class="card-header">Highest Bidder</div>
+          <div class="card-body">
+            <h5 class="card-title" id="highestbidder">Light card title</h5>
+            <p class="card-text">
+              Going to win until someone else bids more
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Title Page</title>
+    <style>
+      body {
+        background-image: url('dLt4iK.jpg');
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: 100% 100%;
+      }
+    </style>
+
+    <link
+      href="node_modules/bootstrap/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <script>
+      window.onload = function () {
+        if (typeof web3 == 'undefined') {
+          document.getElementById('metamask').innerHTML =
+            'you need to install metamask';
+        }
+        getvalues();
+      };
+      function getvalues() {
+        try {
+          var abi = [
+            {
+              outputs: [],
+              inputs: [
+                { type: 'address', name: '_benificiary' },
+                { type: 'uint256', unit: 'sec', name: '_bidding_time' },
+              ],
+              constant: false,
+              payable: false,
+              type: 'constructor',
+            },
+            { constant: false, payable: true, type: 'fallback' },
+            {
+              name: 'withdraw',
+              outputs: [],
+              inputs: [],
+              constant: false,
+              payable: false,
+              type: 'function',
+              gas: 56154,
+            },
+            {
+              name: 'endAuction',
+              outputs: [],
+              inputs: [],
+              constant: false,
+              payable: false,
+              type: 'function',
+              gas: 72639,
+            },
+            {
+              name: 'beneficiary',
+              outputs: [{ type: 'address', name: 'out' }],
+              inputs: [],
+              constant: true,
+              payable: false,
+              type: 'function',
+              gas: 1211,
+            },
+            {
+              name: 'auctionStart',
+              outputs: [{ type: 'uint256', unit: 'sec', name: 'out' }],
+              inputs: [],
+              constant: true,
+              payable: false,
+              type: 'function',
+              gas: 1241,
+            },
+            {
+              name: 'auctionend',
+              outputs: [{ type: 'uint256', unit: 'sec', name: 'out' }],
+              inputs: [],
+              constant: true,
+              payable: false,
+              type: 'function',
+              gas: 1271,
+            },
+            {
+              name: 'highestBidder',
+              outputs: [{ type: 'address', name: 'out' }],
+              inputs: [],
+              constant: true,
+              payable: false,
+              type: 'function',
+              gas: 1301,
+            },
+            {
+              name: 'highestBid',
+              outputs: [{ type: 'uint256', unit: 'wei', name: 'out' }],
+              inputs: [],
+              constant: true,
+              payable: false,
+              type: 'function',
+              gas: 1331,
+            },
+            {
+              name: 'ended',
+              outputs: [{ type: 'bool', name: 'out' }],
+              inputs: [],
+              constant: true,
+              payable: false,
+              type: 'function',
+              gas: 1361,
+            },
+            {
+              name: 'pendingReturns',
+              outputs: [{ type: 'uint256', unit: 'wei', name: 'out' }],
+              inputs: [{ type: 'address', name: 'arg0' }],
+              constant: true,
+              payable: false,
+              type: 'function',
+              gas: 1545,
+            },
+          ];
+          var contractAddress = '0xA23F3Ba559030403680E88328eA0087C32AC5896';
+          myAbi = web3.eth.contract(abi);
+          var myfunction = myAbi.at(contractAddress);
+          myfunction.beneficiary.call(function (err, result) {
+            if (err) {
+              document.getElementById('metamask').innerHTML = err;
+            }
+            if (result) {
+              document.getElementById('beneficiary').innerHTML = result;
+            }
+          });
+          myfunction.auctionend.call(function (err, result) {
+            if (err) {
+              document.getElementById('metamask').innerHTML = err;
+            }
+            if (result) {
+              document.getElementById('endsin').innerHTML = result / 1000;
+            }
+          });
+          myfunction.highestBid.call(function (err, result) {
+            if (err) {
+              document.getElementById('metamask').innerHTML = err;
+            }
+            if (result) {
+              document.getElementById('highestbid').innerHTML = result;
+            }
+          });
+          myfunction.highestBidder.call(function (err, result) {
+            if (err) {
+              document.getElementById('metamask').innerHTML = err;
+            }
+            if (result) {
+              document.getElementById('highestbidder').innerHTML = result;
+            }
+          });
+        } catch (err) {
+          document.getElementById('metamask').innerHTML = err;
+        }
+      }
+      function makedeposit() {
+        const amount = web3.toWei(0.0002, 'ether');
+        web3.eth.getAccounts(function (error, result) {
+          web3.eth.sendTransaction(
+            {
+              from: result[0],
+              to: '0xA23F3Ba559030403680E88328eA0087C32AC5896',
+              value: amount,
+              data: '0x06cb4bcd',
+            },
+            function (err, transactionHash) {
+              if (!err) console.log(transactionHash);
+            }
+          );
+        });
+      }
+    </script>
+    <div id="metamask"></div>
+    <div class="row">
+      <div class="col-md-12 text-center text-black" style="padding-top: 3%;">
+        <h1 class="p-4" class="justify-center">
+          OPEN BIDDING
+        </h1>
+      </div>
+      <div class="col-md-12 text-center text-black">
+        <h6 class="p-3" class="justify-center bold color-black">
+          CONTRACT ADDRESS
+          <p id="contractaddress">0xA23F3Ba559030403680E88328eA0087C32AC5896</p>
+        </h6>
+      </div>
+      <div class="col-md-12 text-center text-black bold">
+        <h6 class="p-3" class="justify-center">
+          BENIFICIARY ADDRESS
+          <p class="p-1" id="beneficiary"></p>
+        </h6>
+      </div>
+      <div class="col-md-12 text-center p-4">
+        <input
+          id="Button1"
+          type="button"
+          class="btn btn-dark"
+          value="Bid your price"
+          onclick="makedeposit()"
+        />
+      </div>
+
+      <div
+        class="card-deck text-center justify-center"
+        style="padding-left: 20%; padding-right: 20%;"
+      >
+        <div
+          class="card color:yellow mb-3 justify-center border-info"
+          style="max-width: 18rem;"
+        >
+          <div class="card-header border-info">HIGHEST BID</div>
+          <div class="card-body">
+            <h5 class="card-title" id="highestbid">Light card title</h5>
+            <p class="card-text text-info bold">
+              It's the maximum bid set by people till this time
+            </p>
+          </div>
+        </div>
+        <div class="card bg-light mb-3 border-info" style="max-width: 36rem;">
+          <div class="card-header text-bold border-info">AUCTION ENDS IN</div>
+          <div class="card-body">
+            <h6 class="card-title" id="endsin">Light card title</h6>
+            <p class="card-text text-info bold">
+              Quickly bid before the bidding ends
+            </p>
+          </div>
+        </div>
+        <div class="card bg-light mb-3 border-info" style="max-width: 100rem;">
+          <div class="card-header bold border-info">HIGHEST BIDDER</div>
+          <div class="card-body">
+            <h6 class="card-title bold" id="highestbidder">Light card title</h6>
+            <p class="card-text text-info">
+              Going to win until someone else bids more
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
